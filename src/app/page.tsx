@@ -1,101 +1,128 @@
-import Image from "next/image";
+"use client"; // Diretiva do Next.js para indicar que este componente é um Client Component. Isso é necessário para utilizar hooks como useState.
 
-export default function Home() {
+import React, { useState } from 'react'; // Importa o React e o hook useState para gerenciar estados e permitir a interatividade com o DOM.
+
+interface Funcionario { // Definição de uma interface Funcionario.
+  nome: string;           // Propriedade nome, representando o nome do funcionário (tipo string).
+  tempoEmpresa: number;   // Propriedade tempoEmpresa, indicando o tempo de empresa em anos (tipo number).
+  cargo: string;          // Propriedade cargo, indicando o cargo do funcionário (tipo string).
+  salario: number;        // Propriedade salario, representando o salário do funcionário (tipo number).
+  bonus: number;          // Propriedade bonus, representando o valor do bônus do funcionário (tipo number).
+}
+// **POO - Encapsulamento:** A interface `Funcionario` encapsula todas as propriedades necessárias para um funcionário. Garante que cada funcionário tenha a mesma estrutura e tipos, isolando e padronizando a manipulação de dados.
+
+const Pagina = () => { // Define o componente funcional 'Pagina' como principal da aplicação.
+  // Estado 'funcionarios' que armazena a lista de funcionários. Inicializa com dados salvos no localStorage ou com um array vazio.
+  const [funcionarios, setFuncionarios] = useState<Funcionario[]>(JSON.parse(localStorage.getItem('funcionarios') || '[]'));
+  // **Manipulação do DOM:** Inicializa o estado com valores armazenados no localStorage e converte para uma lista de `Funcionario`.
+
+  // Estado 'nome' para armazenar o valor do campo de nome do formulário.
+  const [nome, setNome] = useState('');
+
+  // Estado 'tempoEmpresa' para armazenar o valor do campo de tempo de empresa do formulário.
+  const [tempoEmpresa, setTempoEmpresa] = useState('');
+
+  // Estado 'cargo' para armazenar o valor do campo de cargo. Inicializa com "Funcionário Comum".
+  const [cargo, setCargo] = useState('Funcionário Comum');
+
+  // Estado 'salario' para armazenar o valor do campo de salário do formulário.
+  const [salario, setSalario] = useState('');
+
+  // Função para adicionar um novo funcionário à lista e salvar no localStorage.
+  const adicionarFuncionario = () => { 
+    // Verifica se os campos obrigatórios estão preenchidos (nome, tempoEmpresa, salario).
+    if (nome && tempoEmpresa && salario) {
+      // Cria um novo objeto do tipo Funcionario com os dados fornecidos.
+      const novoFuncionario: Funcionario = { 
+        nome,                                  // Propriedade nome do novo funcionário.
+        tempoEmpresa: Number(tempoEmpresa),    // Converte o tempo de empresa de string para número.
+        cargo,                                 // Propriedade cargo do novo funcionário.
+        salario: Number(salario),              // Converte o salário de string para número.
+        bonus: Number(salario) * (             // Calcula o bônus com base no cargo:
+          cargo === 'Gerente' ? 0.2            // Bônus de 20% para Gerente.
+          : cargo === 'Diretor' ? 0.3          // Bônus de 30% para Diretor.
+          : 0.1                                // Bônus de 10% para Funcionário Comum.
+        ),
+      };
+      // **POO - Instanciação de Objeto:** O novo funcionário é instanciado como um objeto que segue a estrutura definida pela interface `Funcionario`.
+
+      // Cria uma nova lista de funcionários com o novo funcionário adicionado.
+      const listaAtualizada = [...funcionarios, novoFuncionario]; 
+      setFuncionarios(listaAtualizada); // Atualiza o estado 'funcionarios' com a nova lista.
+
+      // Salva a lista atualizada de funcionários no localStorage para persistir os dados.
+      localStorage.setItem('funcionarios', JSON.stringify(listaAtualizada));
+      // **Manipulação do DOM:** O localStorage é manipulado diretamente para armazenar a lista atualizada de funcionários, garantindo persistência dos dados.
+
+      // Reseta os campos do formulário para valores iniciais.
+      setNome('');            // Reseta o campo nome para vazio.
+      setTempoEmpresa('');    // Reseta o campo tempoEmpresa para vazio.
+      setSalario('');         // Reseta o campo salario para vazio.
+      setCargo('Funcionário Comum'); // Reseta o cargo para "Funcionário Comum".
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div>
+      {/* Cabeçalho da seção de cadastro de funcionários */}
+      <h2>Cadastro de Funcionários</h2>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      {/* Formulário para inserir os dados do funcionário */}
+      <div className="formulario">
+        {/* Campo de entrada de texto para o nome do funcionário */}
+        <input
+          placeholder="Nome"             // Placeholder que indica ao usuário o que deve ser preenchido.
+          value={nome}                    // Valor atual do campo controlado pelo estado 'nome'.
+          onChange={(e) => setNome(e.target.value)} // Atualiza o estado 'nome' sempre que o valor do input muda.
+        /><br></br> {/* Quebra de linha no formulário */}
+
+        {/* Campo de entrada de texto para o tempo de empresa do funcionário */}
+        <input
+          placeholder="Tempo de Empresa"  // Placeholder para indicar o que deve ser preenchido.
+          value={tempoEmpresa}            // Valor atual do campo controlado pelo estado 'tempoEmpresa'.
+          onChange={(e) => setTempoEmpresa(e.target.value)} // Atualiza o estado 'tempoEmpresa' quando o valor do input muda.
+        /><br></br> {/* Quebra de linha no formulário */}
+
+        {/* Campo de entrada de texto para o salário do funcionário */}
+        <input
+          placeholder="Salário"           // Placeholder para indicar o que deve ser preenchido.
+          value={salario}                 // Valor atual do campo controlado pelo estado 'salario'.
+          onChange={(e) => setSalario(e.target.value)} // Atualiza o estado 'salario' quando o valor do input muda.
+        /><br></br> {/* Quebra de linha no formulário */}
+
+        {/* Campo de seleção para escolher o cargo do funcionário */}
+        <select value={cargo} onChange={(e) => setCargo(e.target.value)}>
+          {/* Opções disponíveis no dropdown */}
+          <option>Funcionário Comum</option>
+          <option>Gerente</option>
+          <option>Diretor</option>
+        </select><br></br> {/* Quebra de linha no formulário */}
+
+        {/* Botão que chama a função 'adicionarFuncionario' ao ser clicado */}
+        <button onClick={adicionarFuncionario}>Adicionar Funcionário</button>
+        {/* **Manipulação do DOM:** O botão, ao ser clicado, executa a função `adicionarFuncionario` que atualiza o estado e o DOM. */}
+      </div>
+
+      {/* Cabeçalho da seção de lista de funcionários */}
+      <h2>Lista de Funcionários</h2>
+
+      {/* Lista não ordenada para exibir os funcionários */}
+      <ul>
+        {/* Percorre cada funcionário na lista 'funcionarios' e cria um item de lista para cada um */}
+        {funcionarios.map((funcionario, indice) => (
+          <li key={indice}> {/* Cada item da lista deve ter uma chave única, aqui usamos o índice do array */}
+            {/* Exibe as informações do funcionário */}
+            <strong>{funcionario.nome}</strong> {/* Nome do funcionário em negrito */}
+            <br></br>Tempo de Empresa: {funcionario.tempoEmpresa} anos {/* Exibe o tempo de empresa */}
+            <br></br>{funcionario.cargo} {/* Exibe o cargo */}
+            <br></br>Salário: R${funcionario.salario.toFixed(2)} {/* Exibe o salário formatado para duas casas decimais */}
+            <br></br>Bônus: R${funcionario.bonus.toFixed(2)} {/* Exibe o bônus formatado para duas casas decimais */}
+          </li>
+        ))}
+      </ul>
+      {/* **Manipulação do DOM:** A lista de funcionários é renderizada dinamicamente com base no estado `funcionarios`. Qualquer alteração nesse estado reflete automaticamente no DOM. */}
     </div>
   );
-}
+};
+
+export default Pagina; // Exporta o componente 'Pagina' para ser utilizado em outros lugares.

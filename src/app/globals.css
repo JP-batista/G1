@@ -1,27 +1,110 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* globals.css */
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Estilos gerais para o corpo e cabeçalho */
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif; /* Fonte legível e profissional */
+  background-color: #f4f7fc; /* Fundo suave para a página */
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+/* Estilo do cabeçalho da página */
+h2 {
+  text-align: center;
+  color: #333;
+  margin-top: 20px;
+}
+
+/* Container principal para o conteúdo */
+.formulario {
+  width: 400px; /* Define a largura do formulário */
+  margin: 30px auto; /* Centraliza o formulário na tela */
+  padding: 20px;
+  background-color: #fff; /* Fundo branco para destacar o formulário */
+  border: 1px solid #ddd; /* Borda sutil */
+  border-radius: 8px; /* Bordas arredondadas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para dar um efeito de profundidade */
+}
+
+/* Estilo dos campos de input */
+input, select {
+  width: calc(100% - 20px); /* Ocupa toda a largura menos o padding */
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd; /* Borda sutil */
+  border-radius: 5px; /* Bordas arredondadas */
+  box-sizing: border-box; /* Inclui padding na largura total */
+  transition: border-color 0.3s ease; /* Transição suave para as bordas */
+}
+
+/* Estilo de foco para os campos de input */
+input:focus, select:focus {
+  border-color: #4CAF50; /* Cor de borda ao focar */
+  outline: none; /* Remove a borda padrão */
+}
+
+/* Botão para adicionar funcionário */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50; /* Cor verde para o botão */
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px; /* Bordas arredondadas */
+  cursor: pointer; /* Mostra que é clicável */
+  transition: background-color 0.3s ease; /* Transição suave */
+}
+
+/* Estilo do botão ao passar o mouse */
+button:hover {
+  background-color: #45a049; /* Cor mais escura ao passar o mouse */
+}
+
+/* Lista de funcionários */
+ul {
+  list-style-type: none; /* Remove as bolinhas da lista */
+  padding: 0;
+  max-width: 600px;
+  margin: 20px auto;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para cada item da lista */
+li {
+  background: #f9f9f9;
+  padding: 15px;
+  border-bottom: 1px solid #ddd; /* Separação entre os itens */
+  font-size: 16px;
+}
+
+/* Remove a borda inferior do último item */
+li:last-child {
+  border-bottom: none;
+}
+
+/* Negrito para o nome do funcionário */
+li strong {
+  color: #333;
+}
+
+/* Título da lista de funcionários */
+h2:nth-of-type(2) {
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 600px) {
+  .formulario, ul {
+    width: 90%; /* Aumenta a largura para ocupar mais espaço na tela */
+  }
+
+  input, select {
+    width: calc(100% - 20px); /* Ajusta a largura para dispositivos menores */
   }
 }
