@@ -15,6 +15,11 @@ h2 {
   margin-top: 20px;
 }
 
+header {
+  text-align: center;
+  color: #333;
+}
+
 /* Container principal para o conteúdo */
 .formulario {
   width: 400px; /* Define a largura do formulário */
